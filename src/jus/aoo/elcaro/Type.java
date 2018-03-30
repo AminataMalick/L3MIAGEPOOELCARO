@@ -9,7 +9,7 @@ import java.io.IOException;
  *
  * @param <T> le type de représentation des valeurs de ce type
  */
-public abstract class Type <T> {
+public abstract class Type <T> implements _Attribut{
 	protected String name; // nom du type
 	
 	/**
