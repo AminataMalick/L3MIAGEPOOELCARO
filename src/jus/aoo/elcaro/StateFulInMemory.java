@@ -26,4 +26,7 @@ public class StateFulInMemory extends StateFull {
 		tuples.add(tuple);	
 	}
 
+	@Override public void remove(int index, _Tuple tuple) {
+		tuples.remove(index);		
+	}
 }

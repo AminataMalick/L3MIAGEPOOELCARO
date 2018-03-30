@@ -7,6 +7,4 @@ public abstract class StateLessUnaire extends StateLess {
 		super(nom, schema);
 		this.r=mere;
 	}
-
-
 }
