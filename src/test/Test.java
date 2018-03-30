@@ -52,7 +52,7 @@ public class Test {
 		relation.add(new Tuple(2,"PERRIER", "CHARLES"));
 		relation.add(new Tuple(3,"LABBE", "CAROLINE"));
 
-		for(_Tuple t : relation1){
+		for(_Tuple t : relation2){
 			for(Object o : t){
 				System.out.print(o+" ");
 			}

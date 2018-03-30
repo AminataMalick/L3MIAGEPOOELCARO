@@ -18,5 +18,4 @@ public class Tuple implements _Tuple {
 			}
 		};
 	}
-
 }
