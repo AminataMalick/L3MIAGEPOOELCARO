@@ -12,7 +12,6 @@ public class Projection extends StateLessUnaire {
 	}
 
 	@Override public Iterator<_Tuple> iterator() {
-		// TODO Auto-generated method stub
 		return new Iterator<_Tuple>() {
 			Iterator<_Tuple> it = r.iterator();
 			boolean hasNext=getNext();
@@ -26,11 +25,9 @@ public class Projection extends StateLessUnaire {
 			private boolean getNext() {
 				if(!it.hasNext()) return false;
 				boolean b=false;
-				while(it.hasNext() && !(b=a.eval(next=it.next())));
+				while(it.hasNext() && !(b=a.equals(next=it.next())));
 				return b;
 			}
 		};
 	}
-
-
 }

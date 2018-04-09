@@ -10,7 +10,6 @@ public class Selection extends StateLessUnaire {
 	}
 
 	@Override public Iterator<_Tuple> iterator() {
-		// TODO Auto-generated method stub
 		return new Iterator<_Tuple>() {
 			Iterator<_Tuple> it = r.iterator();
 			boolean hasNext=getNext();
@@ -29,5 +28,4 @@ public class Selection extends StateLessUnaire {
 			}
 		};
 	}
-
 }

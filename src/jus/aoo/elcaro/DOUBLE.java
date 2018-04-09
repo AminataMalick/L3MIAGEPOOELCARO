@@ -22,6 +22,8 @@ public class DOUBLE extends Type<Double>{
 	public void serialisation(String data) {
 		Double.parseDouble(data);		
 	}
+
+	// @Override public String getName() {return this.name;}
 	
 	
 }

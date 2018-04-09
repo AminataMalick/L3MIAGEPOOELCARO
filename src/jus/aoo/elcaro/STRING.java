@@ -10,5 +10,5 @@ public class STRING extends Type<String> {
 	@Override public String deserialisation(DataInputStream is) throws IOException {return is.readUTF();}
 	@Override public void serialisation(DataOutputStream os, String data) throws IOException {os.writeUTF(data);}
 	@Override public void serialisation(String data) {}
-	
+	// @Override public String getName() {return this.name;}
 }
