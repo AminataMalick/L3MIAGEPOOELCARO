@@ -1,7 +1,10 @@
-package jus.aoo.elcaro;
+package relations;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import interfaces._Attribut;
+import interfaces._Tuple;
 
 public class Projection extends StateLessUnaire {
 

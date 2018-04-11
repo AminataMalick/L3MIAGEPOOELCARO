@@ -1,4 +1,7 @@
-package jus.aoo.elcaro;
+package relations;
+
+import interfaces._Attribut;
+import types.Type;
 
 public class Attribut implements _Attribut {
 	private final String nom;

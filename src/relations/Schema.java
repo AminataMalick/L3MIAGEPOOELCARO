@@ -1,6 +1,8 @@
-package jus.aoo.elcaro;
+package relations;
 
 import java.util.Iterator;
+
+import interfaces._Attribut;
 
 public class Schema implements Iterable<_Attribut>{
 	private final _Attribut[] attributs;

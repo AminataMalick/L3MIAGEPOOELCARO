@@ -1,8 +1,10 @@
-package jus.aoo.elcaro;
+package types;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import interfaces._Attribut;
 
 /**
  * @author carriean

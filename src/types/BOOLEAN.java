@@ -1,4 +1,4 @@
-package jus.aoo.elcaro;
+package types;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

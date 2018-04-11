@@ -1,7 +1,9 @@
-package jus.aoo.elcaro;
+package relations;
 
 import java.util.HashMap;
 import java.util.Iterator;
+
+import interfaces._Tuple;
 
 public class StateFulInMemory extends StateFull {
 	/**

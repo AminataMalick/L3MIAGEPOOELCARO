@@ -1,4 +1,6 @@
-package jus.aoo.elcaro;
+package relations;
+
+import interfaces._Tuple;
 
 public abstract class StateFull extends Relation {
 

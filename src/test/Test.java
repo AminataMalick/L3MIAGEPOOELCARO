@@ -2,19 +2,19 @@ package test;
 
 import java.util.ArrayList;
 
-import jus.aoo.elcaro.Attribut;
-import jus.aoo.elcaro.DOUBLE;
-import jus.aoo.elcaro.INT;
-import jus.aoo.elcaro.Projection;
-import jus.aoo.elcaro.Relation;
-import jus.aoo.elcaro.STRING;
-import jus.aoo.elcaro.Schema;
-import jus.aoo.elcaro.Selection;
-import jus.aoo.elcaro.StateFulInMemory;
-import jus.aoo.elcaro.Tuple;
-import jus.aoo.elcaro._Attribut;
-import jus.aoo.elcaro._Predicat;
-import jus.aoo.elcaro._Tuple;
+import interfaces._Attribut;
+import interfaces._Predicat;
+import interfaces._Tuple;
+import relations.Attribut;
+import relations.Projection;
+import relations.Relation;
+import relations.Schema;
+import relations.Selection;
+import relations.StateFulInMemory;
+import relations.Tuple;
+import types.DOUBLE;
+import types.INT;
+import types.STRING;
 
 public class Test {
 
@@ -80,13 +80,6 @@ public class Test {
 		});
 		System.out.println(r.toString());
 		
-		/*for(_Tuple t : r){
-			for(Object o : t){
-				System.out.print(o+" ");
-			}
-			System.out.println();
-		}*/
-		
 		System.out.println("--------------------test projection--------------------");
 		
 		Schema sch = new Schema(sc2.getAttribut(0));
@@ -94,12 +87,5 @@ public class Test {
 		Relation pr = new Projection(relation2, sch);
 		
 		System.out.println(pr.toString());
-		
-		/*for(_Tuple t : pr){
-			for(Object o : t){
-				System.out.print(o+" ");
-			}
-			System.out.println();
-		}*/
 	}
 }

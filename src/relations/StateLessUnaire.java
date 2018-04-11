@@ -1,4 +1,4 @@
-package jus.aoo.elcaro;
+package relations;
 
 
 public abstract class StateLessUnaire extends StateLess {

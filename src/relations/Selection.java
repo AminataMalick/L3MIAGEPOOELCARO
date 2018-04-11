@@ -1,6 +1,9 @@
-package jus.aoo.elcaro;
+package relations;
 
 import java.util.Iterator;
+
+import interfaces._Predicat;
+import interfaces._Tuple;
 
 public class Selection extends StateLessUnaire {
 	_Predicat p;

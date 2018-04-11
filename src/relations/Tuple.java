@@ -1,6 +1,8 @@
-package jus.aoo.elcaro;
+package relations;
 
 import java.util.Iterator;
+
+import interfaces._Tuple;
 
 public class Tuple implements _Tuple {
 	private final Object[] ligne;

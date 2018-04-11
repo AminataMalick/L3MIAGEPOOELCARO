@@ -1,4 +1,4 @@
-package jus.aoo.elcaro;
+package interfaces;
 
 public interface _Tuple extends Iterable<Object>{
 

@@ -1,4 +1,4 @@
-package jus.aoo.elcaro;
+package relations;
 
 import java.util.Iterator;
 
