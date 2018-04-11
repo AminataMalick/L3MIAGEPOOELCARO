@@ -1,15 +1,348 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
- */options{  static = true;}PARSER_BEGIN(melanie)
-public class melanie{  public static void main(String args []) throws ParseException  {   melanie parser = new melanie(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");      try      {        switch (melanie.one_line())        {          case 0 :           System.out.println("OK.");          break;          case 1 :           System.out.println("Goodbye.");          break;          default :           break;        }      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        melanie.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(melanie)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}int one_line() :{}{  sum() ";"  {    return 0;  }| ";"  {    return 1;  }}int sum() :{
-  int t1, t2 ;
-  Token t ;
-}{  t1=term()  (    (      t=< PLUS >    | t=< MINUS >    )    t2=term()
+ */
+options
+{
+  static = true;
+  ignore_case = true;
+}
+
+PARSER_BEGIN(grammaireTest)
+package grammaire;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Iterator;
+
+
+abstract class Requetes { }
+
+
+class Requete extends Requetes{
+	private Attribut a ;
+	private Relation r;
+	private Where w;
+	public Requete ( Attribut a, Relation r,Where w) {this.a = a; this.r = r; this.w = w; }
+	public Requete ( Attribut a, Relation r) {this.a = a; this.r = r;}
+	public String toString( ) {
+		String s = "SELECT " + a.toString() + " FROM " + r.toString();
+		if(w!=null)
+  			s+= w.toString(); 
+		return s ;
+	}
+}
+
+
+class Attribut {
+  	private boolean distinct ;
+	private boolean etoile;
+	private ArrayList <String>  TabAtt ;
+	public Attribut() { distinct = false; etoile = false; TabAtt = new ArrayList<String >(); }
+	public Attribut( String a ) { distinct = false;  etoile = false;TabAtt = new ArrayList<String >(); addAttribut(a); }
+	public Attribut( boolean distinct , String a ) {this.distinct = distinct; this.etoile = false; TabAtt = new ArrayList<String >(); addAttribut(a); }
+	public Attribut( boolean etoile ) { this.etoile = etoile; distinct = false; TabAtt = new ArrayList<String >(); }
+	public String toString() {
+	  String s ;
+	  if(etoile != false)
+	  	return "*";
+	  if(distinct != false)
+		s = " DISTINCT ";
+	  else
+	  	s = "";
+	  ListIterator<String> it = TabAtt.listIterator();
+      while(it.hasNext()){
+         s += it.next();
+         if( it.hasNext())
+         	s += ", ";
+      }
+      return s;}
+	public void addAttribut (String a) { TabAtt.add(a) ;};
+	public List<String > getAttributs () {  return TabAtt ; }
+}
+
+
+class Relation {
+	private String r;
+	private Attribut attJoint;
+	public Relation( String r ) { this.r = r; this.attJoint = new Attribut(); }
+	public void Jointure( Relation r2, Attribut a1 ,Operateur op, Attribut a2) { r += " JOIN " + r2.toString() + " ON (" + a1.toString() + op.toString()+ a2.toString()+")"; }
+	public void NaturalJoin( Relation r2 ) {r += " NATURAL JOIN " + r2.toString() ; }
+	public String toString( ) { return r ;}
+}
+
+class Where {
+  private String where;
+  public Where ( Condition c ) { where = c.toString(); }
+  public Where ( ) { where = "TRUE"; }
+  public void addAnd ( Condition c ) { where += " AND" + c.toString(); }
+  public void addOr( Condition c) { where += " OR" + c.toString(); }
+  public String toString() { return " WHERE " + where ; }
+}
+
+class Condition {
+  private String c1, c2;
+  private Operateur o;
+  public Condition( String c1,Operateur o, String c2 ) { this.c1 = c1; this.o = o; this.c2 = c2; }
+  public String toString() { return c1 + o.toString() + c2 ; }
+}
+class Operateur {
+  private String op;
+  public Operateur( String op ) { this.op = op; }
+  public String toString() { return " " + op + " " ; }
+}
+
+
+class Insert extends Requetes{
+	private HashMap<String,String> valc;
+	private Relation r;
+	public Insert ( Relation r, Attribut a, List<String> v ) {
+		this.r = r;
+		valc= new HashMap<String,String>();
+		ListIterator<String> TabAtt = a.getAttributs().listIterator();
+		ListIterator<String> Tabv = v.listIterator();
+		String cle;
+		while(TabAtt.hasNext() ) {
+		  	cle = (String) TabAtt.next();
+		    if(Tabv.hasNext())
+		    	valc.put( cle ,(String) Tabv.next() );
+		}
+	}
+
+
+	public String toString() {
+		Set cles = valc.keySet();
+		Iterator it = cles.iterator();
+		String s2 = "", cle, val, s ="INSERT INTO "+  r.toString() + " (" ;
+		while (it.hasNext()){
+		    cle = (String) it.next();
+		    s+= cle ;
+		    s2+= (String) valc.get(cle);
+		    if(it.hasNext()) {
+		      s+= "," ;
+		      s2+= "," ;
+		    }
+		}
+		s+= ") VALUES " + "(" + s2 + ")" ;
+		return s + ";";
+	}
+}
+
+class Creation extends Requetes{
+	private String nomr = "";
+	private String c;
+	private HashMap<String, String > v;
+	public Creation( String r ) {
+		nomr = r;
+		v = new HashMap<String, String>();
+	}
+	public void addType(String attribut, String type) {
+		v.put( attribut, type );
+	}
+	public void addPrimaryKey( String pk ) {
+		if( pk.equals("") ) pk = c;
+	}
+}
+
+
+class Suppr extends Requetes{
+	private Relation r;
+	public Suppr ( Relation r) {
+	  this.r = r;
+   }	
+   public String toString( ) {
+     return "DROP TABLE " + r.toString(); }
+}
+
+
+public class grammaireTest
+{
+  public static void main(String args []) throws ParseException
+  {
+    grammaireTest parser = new grammaireTest(System.in);
     {
-	if(t.image == "+")
-		t1 += t2 ;
-    else
-    	  t1 -= t2 ;	}
-  )*
-  {    return t1 ;
-  }}int term() :{}{  unary()  (    (      < MULTIPLY >    | < DIVIDE >    )    unary()  )*}void unary() :{}{  < MINUS > element()| element()}void element() :{}{  < CONSTANT >| "(" sum() ")"}
+      System.out.println("Reading from standard input...");
+      System.out.println("Enter an expression like : ");
+      System.out.println(" select (distinct) ... from ... (nj/join ... on) (where ...) ;");
+      System.out.println(" insert into ... values (...) ;");
+      System.out.println(" create table ... (...) ;");
+      try
+      {
+        Requetes r = grammaireTest.one_line();
+        System.out.println(r.toString());
+     
+    }catch (Exception e){
+        System.out.println("pwoblem.");
+        System.out.println(e.getMessage());
+        grammaireTest.ReInit(System.in);
+      }catch (Error e){
+        System.out.println("ouloulou pwoblem.");
+        System.out.println(e.getMessage());
+      }
+    }
+  }
+}
+
+PARSER_END(grammaireTest)
+
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+TOKEN : /* SELECT */
+{
+  < SELECT : "select" >
+| < FROM : "from" >
+| < WHERE : "where" >
+| < NATURAL_JOIN : "natural join"> 
+| < JOIN : "join" >
+| < ON : "on" >
+| < DISTINCT : "distinct" >
+| < AND : "and" >
+| < OR : "or" >
+}
+
+
+TOKEN : /* INSERT */
+{
+  < INSERT : "insert" >
+| < INTO : "into" >
+| < TABLE : "table" >
+| < VALUES : "values" >
+| < DELETE : "delete" >
+}
+
+TOKEN : /* CREATE */
+{
+  < CREATE : "create" >
+| < PRIMARY_KEY : "primary key" >
+| < FOREIGN_KEY : "foreign key" >
+| < CONSTRAINT : "constraint" >
+| < DATE : "date" >
+| < INT : "int" >
+| < VARCHAR : "varchar" >
+| < DOUBLE : "double" >
+| < BOOLEAN : "boolean" >
+| < DROP : "drop" >
+}
+
+
+TOKEN : /* SEPARATEURS */
+{
+  < VIRGULE : "," >
+| < PARENTHESEOUV : "(" >
+| < PARENTHESEFERM : ")" >
+}
+
+
+TOKEN : /* OPERATEURS */
+{
+  < OPERATEURS :
+    ">" 
+  | "< " 
+  | "=" 
+  | ">=" 
+  | "<=" 
+  | "!=" >
+}
+
+TOKEN : /* ALPHABET */
+{
+  < NAME : ([ "a"-"z", "0"-"9" ])+ >
+| < ETOILE 	: "*" >
+}
+
+
+TOKEN : /* NOMBRE */
+{
+  < DIGITS : ([ "0"-"9" ])+ >
+}
+
+
+
+Requetes one_line() :{Requetes r;}{
+ ( r = requete() 
+ | r = insert() 
+ | r = creation()
+ | r = supprimer())  ";" 
+ {return r;}
+}
+
+
+
+
+Requetes requete() :{ Relation r; Attribut a; Where w ;}{
+  < SELECT > a = attribut()
+  < FROM > r = relation2 ()
+  ( <  WHERE > w = where() { return new Requete(a,r,w);})?
+  { return new Requete( a, r ); }
+}
+
+Attribut attribut() :{Token t; Attribut a;boolean distinct = false, etoile=true;}{
+< ETOILE > { return new Attribut(etoile); }
+|  ( < DISTINCT > { distinct = true; } )?
+   t = < NAME > { a = new Attribut( distinct,t.image ) ; }
+   (< VIRGULE > t = < NAME > { a.addAttribut(t.image);})*
+   {return a;}
+}
+
+Where where() : {Condition c; Where w; }
+{
+  c = condition() { w = new Where(c) ; return w;}
+}
+Condition condition() : { Token t1,t2; Operateur o; Condition c; }
+{
+  t1 = < NAME > o = operateur() t2 = < NAME > { c = new Condition(t1.image, o, t2.image); return c; }
+}
+Operateur operateur(): {Token t; }
+{
+  t = < OPERATEURS > { return new Operateur(t.image); } 
+}
+
+Relation  relation2(): { Relation t1,t2; Attribut a1,a2; Operateur op; }
+{
+  t1 = relation() (< JOIN > t2 = relation() < ON >  <PARENTHESEOUV > a1 = attribut() op = operateur() a2 = attribut()<PARENTHESEFERM > {t1.Jointure(t2, a1, op, a2); }
+|  < NATURAL_JOIN > t2 = relation() {t1.NaturalJoin(t2); } )* { return t1; }
+}
+
+Relation relation() :{Token t;}{
+  t = < NAME > { return new Relation( t.image ) ; }
+}
+
+
+Requetes insert(): { Relation r; Attribut a; List<String > v; }
+{
+  < INSERT > <INTO > r = relation() < PARENTHESEOUV > a = attribut() < PARENTHESEFERM > < VALUES > < PARENTHESEOUV > v = valeur() < PARENTHESEFERM >
+  {return new Insert(r,a,v);}
+}
+
+
+List<String > valeur() : { Token t; List<String > v;}
+{
+  t = < NAME > { v = new ArrayList<String >(); v.add(t.image); }
+  ( < VIRGULE > t = < NAME > { v.add(t.image); } )*
+  { return v; }
+}
+
+
+Requetes creation() : {Token t,t1,t2;Creation c;}
+{
+  < CREATE > < TABLE > t = < NAME > {c = new Creation(t.image); }
+	(t1=< NAME > t2=< NAME > { c.addPrimaryKey(t1.image);} < VIRGULE > { c.addType(t1.image, t2.image); })+
+  { return c ; }
+}
+
+Requetes supprimer(): {Relation r;}
+{
+	<DROP > <TABLE>  r = relation() {return new Suppr(r);}
+}
+
+
