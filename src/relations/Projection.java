@@ -11,6 +11,12 @@ public class Projection extends StateLessUnaire {
 	private final int[] indexesAttributsVoulus;
 	private final Schema sch;
 	
+	/**
+	 * Projection de la relation mere sur le schema sch
+	 * @param mere
+	 * @param sch
+	 *
+	 */
 	public Projection(Relation mere, Schema sch) {
 		super("projection("+mere.getNom()+")", mere.getSchema(), mere);
 		_Attribut a;
