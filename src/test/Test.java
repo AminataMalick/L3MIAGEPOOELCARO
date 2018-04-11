@@ -18,6 +18,10 @@ import types.STRING;
 
 public class Test {
 
+	/**
+	 * Programme principal permettant les tests
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Schema sc = new Schema(new Attribut("NOM", new STRING("string")), new Attribut("PRENOM", new STRING("string")));
 		StateFulInMemory relation = new StateFulInMemory("Mine",sc);
