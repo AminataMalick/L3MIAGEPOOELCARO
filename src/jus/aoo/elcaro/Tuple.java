@@ -19,5 +19,11 @@ public class Tuple implements _Tuple {
 		};
 	}
 	@Override
-	public Object getKey() {return ligne[0];}
+	public String toString(){
+		String res = "";
+		for(int i = 0; i < ligne.length; i++){
+			res += ligne[i] + " ";
+		}
+		return res;
+	}
 }

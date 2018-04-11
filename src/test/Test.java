@@ -78,27 +78,28 @@ public class Test {
 			}
 			
 		});
+		System.out.println(r.toString());
 		
-		for(_Tuple t : r){
+		/*for(_Tuple t : r){
 			for(Object o : t){
 				System.out.print(o+" ");
 			}
 			System.out.println();
-		}
+		}*/
 		
 		System.out.println("--------------------test projection--------------------");
 		
-		ArrayList<_Attribut> a = new ArrayList<>();
-		a.add(new Attribut("ID_PRODUCTEUR", new INT("int")));
-		a.add(new Attribut("PRENOM", new STRING("string")));
+		Schema sch = new Schema(sc2.getAttribut(0));
 		
-		Relation pr = new Projection(relation2, a);
+		Relation pr = new Projection(relation2, sch);
 		
-		for(_Tuple t : pr){
+		System.out.println(pr.toString());
+		
+		/*for(_Tuple t : pr){
 			for(Object o : t){
 				System.out.print(o+" ");
 			}
 			System.out.println();
-		}
+		}*/
 	}
 }

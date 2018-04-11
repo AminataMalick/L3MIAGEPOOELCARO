@@ -15,6 +15,7 @@ public class Selection extends StateLessUnaire {
 			boolean hasNext=getNext();
 			_Tuple next;
 			@Override public boolean hasNext() {return hasNext;}
+			
 			@Override public _Tuple next() {
 				_Tuple temp = next;
 				hasNext = getNext();
@@ -27,5 +28,18 @@ public class Selection extends StateLessUnaire {
 				return b;
 			}
 		};
+	}
+	
+	@Override
+	public String toString(){
+		String res = "Table : " + getNom() + "\n";
+		res += this.getSchema().toString() + "\n";
+		for(_Tuple t : this){
+			for(Object o : t){
+				res += o.toString() + " ";
+			}
+			res += "\n";
+		}
+		return res;
 	}
 }

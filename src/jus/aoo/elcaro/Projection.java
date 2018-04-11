@@ -5,34 +5,44 @@ import java.util.Iterator;
 
 public class Projection extends StateLessUnaire {
 
-	ArrayList<_Attribut> attributsVoulus = new ArrayList<>();
-	public Projection(Relation mere, ArrayList<_Attribut> a) {
+	private final int[] indexesAttributsVoulus;
+	private final Schema sch;
+	
+	public Projection(Relation mere, Schema sch) {
 		super("projection("+mere.getNom()+")", mere.getSchema(), mere);
-		this.attributsVoulus=a;
+		_Attribut a;
+		indexesAttributsVoulus = new int[sch.getLength()];
+		for(int i = 0 ; i < indexesAttributsVoulus.length ; i++){
+			a = sch.getAttribut(i);
+			indexesAttributsVoulus[i] = mere.getSchema().getIndexAttribut(a);
+		}
+		this.sch = sch;
 	}
 
 	@Override
 	public Iterator<_Tuple> iterator() {
 		return new Iterator<_Tuple>() {
 			Iterator<_Tuple> it = r.iterator();
-			boolean hasNext=getNext();
-			_Tuple next;
-			@Override public boolean hasNext() {return hasNext;}
+			@Override public boolean hasNext() {return it.hasNext();}
 			@Override public _Tuple next() {
-				_Tuple temp = next;
-				hasNext = getNext();
-				return temp;
-			}
-			
-			private boolean getNext() {
-				if(!it.hasNext()) return false;
-				boolean b=false;
-				for(int i = 0; i < attributsVoulus.size(); i++){
-					// tant qu'il y a une suivant, et que l'indice courant des attributs souhaités est trouvé dans le schema
-					while(it.hasNext() && !(b=(schema.getIndexAttribut(attributsVoulus.get(i).getName()) != -1)));
-				}
-				return b;
+				_Tuple t= it.next();
+				Object[] temp = new Object[indexesAttributsVoulus.length];
+				for(int i = 0 ; i < indexesAttributsVoulus.length ; i++){temp[i] = t.get(indexesAttributsVoulus[i]);}
+				return new Tuple(temp);
 			}
 		};
+	}
+	
+	@Override
+	public String toString(){
+		String res = "Table : " + getNom() + "\n";
+		res += sch.toString() + "\n";
+		for(_Tuple t : this){
+			for(Object o : t){
+				res += o.toString() + " ";
+			}
+			res += "\n";
+		}
+		return res;
 	}
 }

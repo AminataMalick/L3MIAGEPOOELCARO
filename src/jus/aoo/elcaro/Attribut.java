@@ -6,4 +6,8 @@ public class Attribut implements _Attribut {
 	public Attribut(String nom, Type type) { this.nom=nom; this.type=type;}
 	@Override
 	public String getName() {return nom;}
+	@Override
+	public String toString(){
+		return getName();
+	}
 }

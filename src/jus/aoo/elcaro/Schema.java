@@ -16,8 +16,24 @@ public class Schema implements Iterable<_Attribut>{
 				return attributs[index++];
 			}};
 	}
-	public int getIndexAttribut(String name){
-		for(int i=0 ; i<attributs.length ; i++){if(attributs[i].getName().equals(name))return i;}
+	public int getIndexAttribut(_Attribut a){
+		for(int i=0 ; i<attributs.length ; i++){if(attributs[i].getName().equals(a.getName()))return i;}
 		return -1;
+	}
+	public _Attribut getAttribut(int i){
+		return 	attributs[i];
+	}
+	
+	public int getLength(){
+		return attributs.length;
+	}
+	
+	@Override
+	public String toString(){
+		String res = "";
+		for(int i =0 ; i<attributs.length; i++){
+			res += attributs[i].toString() + " ";
+		}
+		return res;
 	}
 }
