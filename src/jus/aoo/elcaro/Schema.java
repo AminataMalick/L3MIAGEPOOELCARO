@@ -7,7 +7,6 @@ public class Schema implements Iterable<_Attribut>{
 	public Schema(_Attribut... attributs){ this.attributs=attributs;}
 	@Override
 	public Iterator<_Attribut> iterator() {
-		// TODO Auto-generated method stub
 		return new Iterator<_Attribut>(){
 			private int index = 0;
 			@Override public boolean hasNext() {
@@ -17,5 +16,8 @@ public class Schema implements Iterable<_Attribut>{
 				return attributs[index++];
 			}};
 	}
-	
+	public int getIndexAttribut(String name){
+		for(int i=0 ; i<attributs.length ; i++){if(attributs[i].getName().equals(name))return i;}
+		return -1;
+	}
 }

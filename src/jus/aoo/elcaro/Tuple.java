@@ -18,4 +18,6 @@ public class Tuple implements _Tuple {
 			}
 		};
 	}
+	@Override
+	public Object getKey() {return ligne[0];}
 }

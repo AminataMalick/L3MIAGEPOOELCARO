@@ -23,7 +23,7 @@ public class DOUBLE extends Type<Double>{
 		Double.parseDouble(data);		
 	}
 
-	// @Override public String getName() {return this.name;}
+	@Override public String getName() {return name;}
 	
 	
 }

@@ -5,13 +5,14 @@ import java.util.Iterator;
 
 public class Projection extends StateLessUnaire {
 
-	Attribut[] a;
-	public Projection(Relation mere, Attribut[] a) {
+	ArrayList<_Attribut> attributsVoulus = new ArrayList<>();
+	public Projection(Relation mere, ArrayList<_Attribut> a) {
 		super("projection("+mere.getNom()+")", mere.getSchema(), mere);
-		this.a=a;
+		this.attributsVoulus=a;
 	}
 
-	@Override public Iterator<_Tuple> iterator() {
+	@Override
+	public Iterator<_Tuple> iterator() {
 		return new Iterator<_Tuple>() {
 			Iterator<_Tuple> it = r.iterator();
 			boolean hasNext=getNext();
@@ -22,10 +23,14 @@ public class Projection extends StateLessUnaire {
 				hasNext = getNext();
 				return temp;
 			}
+			
 			private boolean getNext() {
 				if(!it.hasNext()) return false;
 				boolean b=false;
-				while(it.hasNext() && !(b=a.equals(next=it.next())));
+				for(int i = 0; i < attributsVoulus.size(); i++){
+					// tant qu'il y a une suivant, et que l'indice courant des attributs souhaités est trouvé dans le schema
+					while(it.hasNext() && !(b=(schema.getIndexAttribut(attributsVoulus.get(i).getName()) != -1)));
+				}
 				return b;
 			}
 		};
